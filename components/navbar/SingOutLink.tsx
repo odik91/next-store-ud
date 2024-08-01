@@ -1,6 +1,20 @@
+'use client'
+
+import { SignOutButton } from "@clerk/nextjs"
+import { useToast } from "../ui/use-toast"
+import Link from "next/link"
+
 const SingOutLink = () => {
+  const { toast } = useToast()
+
+  const handleLogout = () => {
+    toast({ description: 'Logging Out...' })
+  }
+
   return (
-    <div>SingOutLink</div>
+    <SignOutButton>
+      <Link href={'/'} className="w-full text-left" onClick={handleLogout}>Logout</Link>
+    </SignOutButton>
   )
 }
 export default SingOutLink
