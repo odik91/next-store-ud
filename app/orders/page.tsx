@@ -1,6 +1,53 @@
-const OrderPage = () => {
+import SectionTitle from "@/components/global/SectionTitle";
+import {
+  Table,
+  TableBody,
+  TableCaption,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
+import { fetchUserOrders } from "@/utils/actions";
+import { formatCurrency, formatDate } from "@/utils/format";
+
+const OrderPage = async () => {
+  const orders = await fetchUserOrders();
+
   return (
-    <div>OrderPage</div>
-  )
-}
-export default OrderPage
+    <>
+      <SectionTitle text="Your Order" />
+      <div>
+        <Table>
+          <TableCaption>Total orders: {orders.length}</TableCaption>
+          <TableHeader>
+            <TableRow>
+              <TableHead>Products</TableHead>
+              <TableHead>Order Total</TableHead>
+              <TableHead>Tax</TableHead>
+              <TableHead>Shipping</TableHead>
+              <TableHead>Date</TableHead>
+            </TableRow>
+          </TableHeader>
+          <TableBody>
+            {orders.map((order) => {
+              const { id, products, orderTotal, tax, shipping, createdAt } =
+                order;
+
+              return (
+                <TableRow key={id}>
+                  <TableCell>{products}</TableCell>
+                  <TableCell>{formatCurrency(orderTotal)}</TableCell>
+                  <TableCell>{formatCurrency(tax)}</TableCell>
+                  <TableCell>{formatCurrency(shipping)}</TableCell>
+                  <TableCell>{formatDate(createdAt)}</TableCell>
+                </TableRow>
+              );
+            })}
+          </TableBody>
+        </Table>
+      </div>
+    </>
+  );
+};
+export default OrderPage;
